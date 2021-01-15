@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 
 constexpr int32_t WINDOW_WIDTH = 1600;
 constexpr int32_t WINDOW_HEIGHT = 800;

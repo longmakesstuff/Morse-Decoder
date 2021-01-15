@@ -24,8 +24,7 @@
 // User headers
 #include "Exception.hpp"
 
-namespace mn {
-    namespace CppLinuxSerial {
+namespace mn::CppLinuxSerial {
 
         /// \brief      Represents the baud rate "types" that can be used with the serial port. STANDARD represents all
         ///             the standard baud rates as provided by UNIX, CUSTOM represents a baud rate defined by an arbitray integer.
@@ -174,7 +173,6 @@ namespace mn {
 
         };
 
-    } // namespace CppLinuxSerial
-} // namespace mn
+    } // namespace mn
 
 #endif // #ifndef SERIAL_PORT_SERIAL_PORT_H
