@@ -417,7 +417,7 @@ namespace mn::CppLinuxSerial {
                 //printf("%s\r\n", buf);
 //			data.append(buf);
                 data = std::string(&readBuffer_[0], n);
-                //std::cout << *str << " and size of string =" << str->size() << "\r\n";
+                //std::cout << *str << " and cap of string =" << str->cap() << "\r\n";
             }
 
             // If code reaches here, read must of been successful

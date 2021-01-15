@@ -1,26 +1,20 @@
 #include <SFML/Graphics.hpp>
 #include <Common.hpp>
+#include <Graph.hpp>
 
 int main() {
-    sf::RenderWindow window({(int32_t) WINDOW_WIDTH, (int32_t) WINDOW_HEIGHT}, "Snake AI");
-    window.setFramerateLimit(10);
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 4;
+    settings.depthBits = 32;
+    settings.majorVersion = 2;
+    settings.minorVersion = 5;
+    sf::RenderWindow window({WINDOW_WIDTH, WINDOW_HEIGHT}, "Live Data Plotter", sf::Style::Default, settings);
+    window.setFramerateLimit(45);
 
-    // Game loop
+    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_19200, &window, 500);
+
+    // Main loop
     while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            switch (event.type) {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                default:
-                    break;
-            }
-        }
-        // Drawing white background
-        window.clear(sf::Color::White);
-
-        // Refresh mainPanel
-        window.display();
+        graph.update();
     }
 }

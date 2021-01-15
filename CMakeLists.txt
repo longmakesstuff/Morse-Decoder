@@ -8,6 +8,10 @@ find_package(SFML 2.5 REQUIRED network audio graphics window system)
 find_package(OpenMP)
 find_library(LIB_CPPUNIT cppunit)
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 else ()
