@@ -1,4 +1,5 @@
 const int LDR = A0;
+uint8_t i = 0;
 
 void setup()
 {
@@ -7,7 +8,6 @@ void setup()
 
 void loop(){
   uint32_t output = analogRead(LDR);
-  byte * buffer = (byte*)&output;
-  Serial.write(buffer, 4);
-  delay(1000);
+  Serial.println("Hello");
+  delay(100);     
 }
