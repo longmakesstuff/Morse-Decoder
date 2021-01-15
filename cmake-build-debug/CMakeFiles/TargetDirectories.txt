@@ -1,0 +1,5 @@
+/home/long/Desktop/serial-port-plotting/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/long/Desktop/serial-port-plotting/cmake-build-debug/CMakeFiles/Morser.dir
+/home/long/Desktop/serial-port-plotting/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/long/Desktop/serial-port-plotting/cmake-build-debug/CMakeFiles/main.dir
+/home/long/Desktop/serial-port-plotting/cmake-build-debug/CMakeFiles/prototype.dir

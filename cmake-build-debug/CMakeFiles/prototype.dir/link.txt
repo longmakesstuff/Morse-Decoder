@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/prototype.dir/bin/prototype.cpp.o  -o prototype  -Wl,-rpath,/home/long/Desktop/serial-port-plotting/cmake-build-debug -lm libMorser.so /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1 -lgomp -lpthread 

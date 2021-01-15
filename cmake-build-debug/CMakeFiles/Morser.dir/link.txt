@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -g  -shared -Wl,-soname,libMorser.so -o libMorser.so CMakeFiles/Morser.dir/src/Common.cpp.o CMakeFiles/Morser.dir/src/Exception.cpp.o 
