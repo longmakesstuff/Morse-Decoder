@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(SFML 2.5 REQUIRED network audio graphics window system)
 find_package(OpenMP)
 find_library(LIB_CPPUNIT cppunit)
-
+#
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
@@ -44,13 +44,17 @@ endforeach ()
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 # Adding unit tests in "tests"
+if (NOT LIB_CPPUNIT)
+    message(FATAL_ERROR "cppunit not found")
+endif ()
+
 file(GLOB test_files "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
 foreach (file ${test_files})
     get_filename_component(file_name ${file} NAME_WLE)
 
     add_executable(${file_name} ${file})
 
-    target_link_libraries(${file_name} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${PROJECT_NAME} m sfml-graphics sfml-window sfml-system)
+    target_link_libraries(${file_name} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${PROJECT_NAME} m sfml-graphics sfml-window sfml-system cppunit)
 endforeach ()
 
 

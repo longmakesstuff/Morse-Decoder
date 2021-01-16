@@ -6,6 +6,7 @@
 #include <optional>
 #include <sstream>
 #include <vector>
+#include <cctype>
 #include "String.hpp"
 
 template<typename K, typename V>
@@ -21,7 +22,6 @@ private:
     std::map<std::string, std::string> alphaToMorse{};
     std::map<std::string, std::string> morseToAlpha{};
     std::vector<std::string> tokens;
-
 public:
     Morse();
 
@@ -51,6 +51,12 @@ public:
      */
     void add(const std::string& code);
 
+    /**
+     * Append letter for letter from the code into the buffer
+     * @param code incoming code
+     */
+    void add(const char& code);
+
     bool operator<(const Morse &rhs) const;
 
     bool operator>(const Morse &rhs) const;
@@ -62,6 +68,10 @@ public:
     bool operator==(const Morse &rhs) const;
 
     bool operator!=(const Morse &rhs) const;
+
+    [[nodiscard]] std::map<std::string, std::string> &getAlphaToMorse();
+
+    [[nodiscard]] std::map<std::string, std::string> &getMorseToAlpha();
 };
 
 typedef std::pair<std::string, std::string> MorsePair;
