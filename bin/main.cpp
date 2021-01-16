@@ -6,8 +6,6 @@ int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
     settings.depthBits = 32;
-    settings.majorVersion = 2;
-    settings.minorVersion = 5;
     sf::RenderWindow window({WINDOW_WIDTH, WINDOW_HEIGHT}, "Live Data Plotter", sf::Style::Default, settings);
     window.setFramerateLimit(45);
 

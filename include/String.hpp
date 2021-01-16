@@ -22,7 +22,7 @@ inline std::vector<T> strToNum(const std::vector<std::string> &data) {
                 ret.push_back(std::stol(it));
             }
         } catch (std::invalid_argument &e) {
-            LOG_ERROR("Error while converting string to number: " << it);
+            //LOG_ERROR("Error while converting string to number: " << it);
         }
     }
     return ret;

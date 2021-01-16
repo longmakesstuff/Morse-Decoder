@@ -7,7 +7,8 @@ void setup()
 }
 
 void loop(){
-  uint32_t output = analogRead(LDR);
+  // Multiply with 10 for better noise filtering
+  uint32_t output = analogRead(LDR) * 10;
   Serial.println(String(output));
   delay(10);     
 }

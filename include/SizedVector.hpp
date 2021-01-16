@@ -19,13 +19,11 @@ private:
     std::vector<T> mem;
     fpt old_m = 0;
     fpt new_m = 0;
-    fpt old_s = 0;
-    fpt new_s = 0;
 public:
     explicit SizedVector(uint32_t size) : cap(size) {}
 
     inline void push_back(const T &t) {
-        if(t > 50) {
+        if (t > 1000) {
             if (this->mem.size() >= cap) {
                 this->mem.erase(mem.begin());
             }
@@ -33,13 +31,9 @@ public:
 
             if (this->mem.size() == 1) {
                 old_m = new_m = t;
-                old_s = 0;
             } else {
                 new_m = old_m + (t - old_m) / this->mem.size();
-                new_s = old_s + (t - old_m) * (t - new_m);
-
                 old_m = new_m;
-                old_s = new_s;
             }
         }
     }
@@ -54,17 +48,13 @@ public:
 
             assert(mem.size() + data.size() <= cap);
 
-            for(int32_t i = 0; i < data.size(); i++) {
+            for (int32_t i = 0; i < data.size(); i++) {
                 this->push_back(data[i]);
             }
 
         } else if (data.size() == cap) {
-            this->mem = std::vector<T>();
-            old_m = 0;
-            new_m = 0;
-            old_s = 0;
-            new_s = 0;
-            for(int32_t i = 0; i < data.size(); i++) {
+            this->reset();
+            for (int32_t i = 0; i < data.size(); i++) {
                 this->push_back(data[i]);
             }
         } else {
@@ -77,26 +67,16 @@ public:
     }
 
     inline fpt mean() {
-        if(this->mem.empty()) {
+        if (this->mem.empty()) {
             return 0.0;
         }
         return new_m;
-    }
-
-    inline fpt std() {
-        if(this->mem.size() > 1) {
-            return new_s / (mem.size() - 1);
-        }else {
-            return 0.0;
-        }
     }
 
     inline void reset() {
         this->mem = std::vector<fpt>();
         old_m = 0;
         new_m = 0;
-        old_s = 0;
-        new_s = 0;
     }
 
     inline std::vector<T> &data() {
