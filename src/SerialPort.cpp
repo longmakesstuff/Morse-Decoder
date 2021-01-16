@@ -139,7 +139,7 @@ namespace mn::CppLinuxSerial {
 
             // We used to use cfsetispeed() and cfsetospeed() with the B... macros, but this didn't allow
             // us to set custom baud rates. So now to support both standard and custom baud rates lets
-            // just make everything "custom". This giant switch statement could be replaced with a map/lookup
+            // just make everything "custom". This giant switch statement could be replaced with a alphaToMorse/lookup
             // in the future
             if (baudRateType_ == BaudRateType::STANDARD) {
                 tty.c_cflag &= ~CBAUD;

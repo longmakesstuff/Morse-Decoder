@@ -35,7 +35,7 @@ _deps
 *.obj
 *.elf
 *.ilk
-*.map
+*.alphaToMorse
 *.exp
 *.gch
 *.pch
