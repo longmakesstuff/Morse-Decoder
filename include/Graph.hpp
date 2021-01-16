@@ -8,6 +8,7 @@
 #include "Common.hpp"
 #include "SizedVector.hpp"
 #include "Morse.hpp"
+#include "StateMachine.hpp"
 
 class Graph {
 private:
@@ -19,7 +20,8 @@ private:
     FPS fps;
     void readData();
     fpt deltaX;
-
+    Morse morse;
+    StateMachine stateMachine;
     void drawFPS();
 
 public:

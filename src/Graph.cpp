@@ -53,6 +53,17 @@ void Graph::update() {
     this->readData();
     LOG_DEBUG("Finished reading new data")
 
+    // Notify state machine
+    auto machineOutput = stateMachine.enter(this->buffer.data().back(), this->buffer.mean());
+    if(machineOutput.has_value()) {
+        morse.add(machineOutput.value());
+        if(machineOutput.value() == "/") {
+            auto morseDecoded = morse.parse();
+            if(morseDecoded.has_value()) {
+                std::cout << morseDecoded.value() << std::endl;
+            }
+        }
+    }
     // Drawing white background
     window->clear(sf::Color::White);
 
@@ -88,7 +99,6 @@ void Graph::drawFPS() {
     std::stringstream ss;
     fps.update();
     ss << "FPS: " << fps.getFPS();
-    std::cout << ss.str() << std::endl;
     sf::Text fpsText{ss.str(), *font, 15};
     fpsText.setPosition( 50, 10);
     fpsText.setFillColor(sf::Color::Black);

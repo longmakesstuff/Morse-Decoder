@@ -95,7 +95,7 @@ public:
                 "MORSE CODE",
                 "THUNDER BOLT AND LIGHTING VERY VERY FRIGHTENING ME"
         };
-        for (size_t i = 0; i < texts.size(); i++) {
+        for (size_t i = 0; i < codes.size(); i++) {
             auto code = codes[i];
             Morse m;
             for (char & j : code) {
@@ -103,6 +103,7 @@ public:
             }
             auto text = m.parse();
             CPPUNIT_ASSERT(text.has_value());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(texts[i], texts[i], text.value());
         }
     }
 };

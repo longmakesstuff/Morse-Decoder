@@ -93,15 +93,29 @@ std::optional<std::string> Morse::decode(const std::string &code) {
 
 
 std::optional<std::string> Morse::parse() {
+    // Merge all together
     std::stringstream ss;
-
     for(const auto& token : this->tokens) {
-        auto decoded = this->decode(token);
+        ss << token;
+    }
+
+    // Decode letter for letter
+    std::vector<std::string> codeBlocks = strSplit(ss.str(), " ");
+    if(codeBlocks.empty()) {
+        return std::nullopt;
+    }
+
+    std::stringstream result;
+    for(const auto& code : codeBlocks) {
+        auto decoded = this->decode(code);
         if(decoded.has_value()) {
-            ss << token;
+            result << decoded.value();
         }
     }
-    return ss.str();
+
+    // Reset current
+    this->tokens = std::vector<std::string>();
+    return std::optional(result.str());
 }
 
 void Morse::add(const std::string &code) {
