@@ -22,23 +22,36 @@ private:
 public:
     explicit SizedVector(uint32_t size) : cap(size) {}
 
+    /**
+     * Push a new element to the sized vector
+     * @param t new variable
+     * Also calculate the running mean
+     */
     inline void push_back(const T &t) {
-        if (t > 1000) {
-            if (this->mem.size() >= cap) {
-                this->mem.erase(mem.begin());
-            }
-            this->mem.push_back(t);
-
-            if (this->mem.size() == 1) {
-                old_m = new_m = t;
-            } else {
-                new_m = old_m + (t - old_m) / this->mem.size();
-                old_m = new_m;
-            }
+        // Delete first element
+        if (this->mem.size() >= cap) {
+            this->mem.erase(mem.begin());
         }
+        // Push new element
+        this->mem.push_back(t);
+
+        // Start running statistics
+        if (this->mem.size() == 1) {
+            old_m = new_m = t;
+        } else {
+            new_m = old_m + (t - old_m) / this->mem.size();
+            old_m = new_m;
+        }
+
+        assert(mem.size() <= cap);
     }
 
+    /**
+     * Bulk push new data to vector
+     * @param data  bulk data
+     */
     inline void push_back(const std::vector<T> &data) {
+        // There is free space
         if (data.size() < cap) {
             uint32_t newSize = data.size() + mem.size();
             if (newSize >= cap) {
@@ -46,20 +59,24 @@ public:
                 mem.erase(mem.begin(), mem.begin() + toRemove);
             }
 
+            // Sanity test
             assert(mem.size() + data.size() <= cap);
 
-            for (int32_t i = 0; i < data.size(); i++) {
+            for (size_t i = 0; i < data.size(); i++) {
                 this->push_back(data[i]);
             }
 
+            // New data bulk's size is the same as the capacity
         } else if (data.size() == cap) {
             this->reset();
-            for (int32_t i = 0; i < data.size(); i++) {
+            for (size_t i = 0; i < data.size(); i++) {
                 this->push_back(data[i]);
             }
         } else {
             throw std::runtime_error("Can not handle data this big.");
         }
+
+        assert(mem.size() <= cap);
     }
 
     inline size_t size() {
@@ -71,6 +88,10 @@ public:
             return 0.0;
         }
         return new_m;
+    }
+
+    inline uint32_t getCap() const {
+        return cap;
     }
 
     inline void reset() {

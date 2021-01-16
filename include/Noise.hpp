@@ -5,7 +5,6 @@
 #include <vector>
 #include <cmath>
 #include "Common.hpp"
-#include "Statistics.hpp"
 
 constexpr fpt kernel[9] = {1.0 / 16, 2.0 / 16, 1.0 / 16, 2.0 / 16, 4.0 / 16, 2.0 / 16, 1.0 / 16, 2.0 / 16, 1.0 / 16};
 typedef void SignalFilter(SizedVector<fpt> &data);
@@ -13,7 +12,7 @@ typedef void SignalFilter(SizedVector<fpt> &data);
 void naive(SizedVector<fpt>& data) {
     fpt expected = data.mean();
 #pragma omp parallel for
-    for (int32_t i = 0; i < data.size(); i++) {
+    for (size_t i = 0; i < data.size(); i++) {
         if(data[i] < 15) {
             data[i] = expected;
         }

@@ -2,10 +2,33 @@
 
 #include <string>
 #include <vector>
+#include <regex>
 #include "Common.hpp"
 
-std::vector<std::string> strSplit(const std::string &data,
-                                  const std::string &separator = "\n");
+// Split incoming data into tokens
+inline std::vector<std::string> strSplit(const std::string &data,
+                                         const std::string &separator = "\n") {
+    std::regex rex(separator);
+    std::vector<std::string> ret(std::sregex_token_iterator(data.begin(), data.end(), rex, -1),
+                                 std::sregex_token_iterator());
+    return ret;
+}
+
+// Filter token, only allow correct formed strings
+inline std::vector<std::string> encodeAndFilter(const std::vector<std::string> &data) {
+    std::vector<std::string> ret;
+
+    // Can be faster
+    for(const auto& it : data) {
+        if(it.size() >= 5 && it[0] == 'f' && it[4] == 'e' && std::isdigit(it[1]) && std::isdigit(it[2]) && std::isdigit(it[3])){
+            std::stringstream  ss;
+            ss << it[1] << it[2] << it[3];
+            ret.push_back(ss.str());
+        }
+    }
+
+    return ret;
+}
 
 template<typename T>
 inline std::vector<T> strToNum(const std::vector<std::string> &data) {

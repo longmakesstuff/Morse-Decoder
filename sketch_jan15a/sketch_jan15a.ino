@@ -8,7 +8,11 @@ void setup()
 
 void loop(){
   // Multiply with 10 for better noise filtering
-  uint32_t output = analogRead(LDR) * 10;
-  Serial.println(String(output));
+  uint32_t output = analogRead(LDR);
+
+  // Encode string to remove noise
+  // Not the best method, could use some coding theory for this purpose but this works fine enough.
+  String encoded = "f" + String(output) + "e";
+  Serial.println(encoded);
   delay(10);     
 }

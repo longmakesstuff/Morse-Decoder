@@ -10,28 +10,23 @@
 #include <stdexcept>
 #include <string>
 
-namespace mn {
-    namespace CppLinuxSerial {
+namespace mn::CppLinuxSerial {
+    class Exception : public std::runtime_error {
+    public:
+        Exception(const char *file, int line, const std::string &arg) :
+                std::runtime_error(arg) {
+            msg_ = std::string(file) + ":" + std::to_string(line) + ": " + arg;
+        }
 
-        class Exception : public std::runtime_error {
+        ~Exception() noexcept override = default;
 
-        public:
-            Exception(const char *file, int line, const std::string &arg) :
-                    std::runtime_error(arg) {
-                msg_ = std::string(file) + ":" + std::to_string(line) + ": " + arg;
-            }
+        [[nodiscard]] const char *what() const noexcept override {
+            return msg_.c_str();
+        }
 
-            ~Exception() throw() {}
-
-            const char *what() const throw() override {
-                return msg_.c_str();
-            }
-
-        private:
-            std::string msg_;
-        };
-
-    } // namespace CppLinuxSerial
-} // namespace mn
+    private:
+        std::string msg_;
+    };
+}
 
 #define THROW_EXCEPT(arg) throw Exception(__FILE__, __LINE__, arg);
