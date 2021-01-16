@@ -163,3 +163,12 @@ std::map<std::string, std::string> &Morse::getAlphaToMorse() {
 std::map<std::string, std::string> &Morse::getMorseToAlpha() {
     return morseToAlpha;
 }
+
+std::ostream &operator<<(std::ostream &os, const Morse &morse) {
+    os << "[Morse]{";
+    for(const auto& letter : morse.tokens) {
+        os << letter << ", ";
+    }
+    os << "}";
+    return os;
+}

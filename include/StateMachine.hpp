@@ -17,5 +17,5 @@ private:
 public:
     StateMachine();
 
-    std::optional<std::string> enter(fpt last, fpt mean);
+    std::optional<std::string> enter(fpt last, fpt mean, fpt std);
 };

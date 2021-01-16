@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 #include <cctype>
+#include <ostream>
 #include "String.hpp"
 
 template<typename K, typename V>
@@ -72,6 +73,8 @@ public:
     [[nodiscard]] std::map<std::string, std::string> &getAlphaToMorse();
 
     [[nodiscard]] std::map<std::string, std::string> &getMorseToAlpha();
+
+    friend std::ostream &operator<<(std::ostream &os, const Morse &morse);
 };
 
 typedef std::pair<std::string, std::string> MorsePair;

@@ -19,6 +19,8 @@ private:
     std::vector<T> mem;
     fpt old_m = 0;
     fpt new_m = 0;
+    fpt old_s = 0;
+    fpt new_s = 0;
 public:
     explicit SizedVector(uint32_t size) : cap(size) {}
 
@@ -40,7 +42,10 @@ public:
             old_m = new_m = t;
         } else {
             new_m = old_m + (t - old_m) / this->mem.size();
+            new_s = old_s + (t - old_m) * (t - new_m);
+
             old_m = new_m;
+            old_s = new_s;
         }
 
         assert(mem.size() <= cap);
@@ -90,6 +95,14 @@ public:
         return new_m;
     }
 
+    inline fpt std() {
+        if(this->mem.size() > 1) {
+            return new_s / (mem.size() - 1);
+        }else {
+            return 0.0;
+        }
+    }
+
     inline uint32_t getCap() const {
         return cap;
     }
@@ -98,6 +111,9 @@ public:
         this->mem = std::vector<fpt>();
         old_m = 0;
         new_m = 0;
+        old_s = 0;
+        new_s = 0;
+
     }
 
     inline std::vector<T> &data() {

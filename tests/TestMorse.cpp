@@ -86,14 +86,16 @@ public:
                 "-",
                 "-- --- .-. ... . /",
                 "-- --- .-. ... . / -.-. --- -.. .",
-                "- .... ..- -. -.. . .-. / -... --- .-.. - / .- -. -.. / .-.. .. --. .... - .. -. --. / ...- . .-. -.-- / ...- . .-. -.-- / ..-. .-. .. --. .... - . -. .. -. --. / -- ."
+                "- .... ..- -. -.. . .-. / -... --- .-.. - / .- -. -.. / .-.. .. --. .... - .. -. --. / ...- . .-. -.-- / ...- . .-. -.-- / ..-. .-. .. --. .... - . -. .. -. --. / -- .",
+                "... --- ...",
         };
         std::vector<std::string> texts{
                 "THE",
                 "T",
                 "MORSE ",
                 "MORSE CODE",
-                "THUNDER BOLT AND LIGHTING VERY VERY FRIGHTENING ME"
+                "THUNDER BOLT AND LIGHTING VERY VERY FRIGHTENING ME",
+                "SOS"
         };
         for (size_t i = 0; i < codes.size(); i++) {
             auto code = codes[i];

@@ -4,14 +4,14 @@
 Graph::Graph(const std::string &deviceName,
              mn::CppLinuxSerial::BaudRate baudRate,
              sf::RenderWindow *window,
-             sf::Font * font,
+             sf::Font *font,
              int32_t bufferSize) : window(window), font(font), port(deviceName, baudRate), buffer(bufferSize) {
     LOG_INFO("Opening serial port")
     // Initializing port
     port.SetTimeout(-1); // Block when reading until any data is received
     port.Open();
     LOG_INFO("GUI initialized successfully")
-    deltaX =  WINDOW_WIDTH / buffer.getCap();
+    deltaX = WINDOW_WIDTH / buffer.getCap();
 }
 
 Graph::~Graph() {
@@ -54,26 +54,31 @@ void Graph::update() {
     LOG_DEBUG("Finished reading new data")
 
     // Notify state machine
-    auto machineOutput = stateMachine.enter(this->buffer.data().back(), this->buffer.mean());
-    if(machineOutput.has_value()) {
-        morse.add(machineOutput.value());
-        if(machineOutput.value() == "/") {
-            auto morseDecoded = morse.parse();
-            if(morseDecoded.has_value()) {
-                std::cout << morseDecoded.value() << std::endl;
+    if (buffer.size() > 0) {
+        fpt mean = this->buffer.mean();
+        fpt std = this->buffer.std();
+        fpt last = this->buffer.data().back();
+        auto machineOutput = stateMachine.enter(last, mean, std);
+        if (machineOutput.has_value()) {
+            morse.add(machineOutput.value());
+            if (machineOutput.value().find("/") !=std::string::npos) {
+                auto morseDecoded = morse.parse();
+                if (morseDecoded.has_value()) {
+                    std::cout << morseDecoded.value() << std::endl;
+                }
             }
         }
     }
     // Drawing white background
     window->clear(sf::Color::White);
 
-    for(size_t i = 1; i < buffer.size(); i++) {
+    for (size_t i = 1; i < buffer.size(); i++) {
         sf::VertexArray line(sf::LinesStrip, 2);
 
         // Data multiplied with 10 at source
         // Divide with 10 again
         line[0].position = sf::Vector2f((i - 1) * deltaX, WINDOW_HEIGHT - buffer[i - 1]);
-        line[0].color  = sf::Color::Black;
+        line[0].color = sf::Color::Black;
         line[1].position = sf::Vector2f(i * deltaX, WINDOW_HEIGHT - buffer[i]);
         line[1].color = sf::Color::Black;
         window->draw(line);
@@ -84,7 +89,7 @@ void Graph::update() {
     // Data multiplied with 10 at source
     // Divide with 10 again
     meanLine[0].position = sf::Vector2f(0, WINDOW_HEIGHT - buffer.mean());
-    meanLine[0].color  = sf::Color::Red;
+    meanLine[0].color = sf::Color::Red;
     meanLine[1].position = sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT - buffer.mean());
     meanLine[1].color = sf::Color::Red;
     window->draw(meanLine);
@@ -100,7 +105,7 @@ void Graph::drawFPS() {
     fps.update();
     ss << "FPS: " << fps.getFPS();
     sf::Text fpsText{ss.str(), *font, 15};
-    fpsText.setPosition( 50, 10);
+    fpsText.setPosition(50, 10);
     fpsText.setFillColor(sf::Color::Black);
     window->draw(fpsText);
 }
