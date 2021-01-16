@@ -37,10 +37,6 @@ void Graph::readData() {
 
     auto numbers = strToNum<fpt>(tokens);
     buffer.push_back(numbers);
-
-    for(SignalFilter * filter : filters) {
-        filter(buffer);
-    }
 }
 
 void Graph::update() {

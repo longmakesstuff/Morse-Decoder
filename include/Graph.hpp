@@ -7,19 +7,17 @@
 #include "SerialPort.hpp"
 #include "Common.hpp"
 #include "SizedVector.hpp"
-#include "Noise.hpp"
+#include "Morse.hpp"
 
 class Graph {
 private:
     sf::RenderWindow *window;
-    sf::Event event;
+    sf::Event event{};
     sf::Font *font;
     mn::CppLinuxSerial::SerialPort port;
     SizedVector<fpt> buffer;
     FPS fps;
     void readData();
-
-    std::vector<SignalFilter *> filters;
     fpt deltaX;
 
     void drawFPS();
