@@ -31,7 +31,8 @@ public:
                    mn::CppLinuxSerial::BaudRate baudRate,
                    sf::RenderWindow *window,
                    sf::Font *font,
-                   int32_t bufferSize);
+                   int32_t bufferSize,
+                   SpeedLevel speedLevel);
 
     ~Graph();
 

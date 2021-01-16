@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <Common.hpp>
 #include <Graph.hpp>
+#include <Speed.hpp>
 
 int main() {
     LOG_INFO("Initializing GUI")
@@ -11,7 +12,7 @@ int main() {
     sf::Font font;
     font.loadFromFile("DejaVuSans.ttf");
 
-    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_38400, &window, &font, 500);
+    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_38400, &window, &font, 500, SpeedLevel::FAST);
 
     // Main loop
     while (window.isOpen()) {

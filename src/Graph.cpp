@@ -5,8 +5,9 @@ Graph::Graph(const std::string &deviceName,
              mn::CppLinuxSerial::BaudRate baudRate,
              sf::RenderWindow *window,
              sf::Font *font,
-             int32_t bufferSize) : window(window), font(font), port(deviceName, baudRate), buffer(bufferSize),
-                                   speedController(FAST), stateMachine(&speedController) {
+             int32_t bufferSize,
+             SpeedLevel speedLevel) : window(window), font(font), port(deviceName, baudRate), buffer(bufferSize),
+                                   speedController(speedLevel), stateMachine(&speedController) {
     LOG_INFO("Using speed controller: " << speedController);
     LOG_INFO("Opening serial port")
     // Initializing port
