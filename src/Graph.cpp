@@ -5,7 +5,9 @@ Graph::Graph(const std::string &deviceName,
              mn::CppLinuxSerial::BaudRate baudRate,
              sf::RenderWindow *window,
              sf::Font *font,
-             int32_t bufferSize) : window(window), font(font), port(deviceName, baudRate), buffer(bufferSize) {
+             int32_t bufferSize) : window(window), font(font), port(deviceName, baudRate), buffer(bufferSize),
+                                   speedController(FAST), stateMachine(&speedController) {
+    LOG_INFO("Using speed controller: " << speedController);
     LOG_INFO("Opening serial port")
     // Initializing port
     port.SetTimeout(-1); // Block when reading until any data is received
@@ -61,7 +63,7 @@ void Graph::update() {
         auto machineOutput = stateMachine.enter(last, mean, std);
         if (machineOutput.has_value()) {
             morse.add(machineOutput.value());
-            if (machineOutput.value().find("/") !=std::string::npos) {
+            if (machineOutput.value().find("/") != std::string::npos) {
                 auto morseDecoded = morse.parse();
                 if (morseDecoded.has_value()) {
                     std::cout << morseDecoded.value() << std::endl;
@@ -105,7 +107,7 @@ void Graph::drawFPS() {
     fps.update();
     ss << "FPS: " << fps.getFPS();
     sf::Text fpsText{ss.str(), *font, 15};
-    fpsText.setPosition(50, 10);
+    fpsText.setPosition(10, 10);
     fpsText.setFillColor(sf::Color::Black);
     window->draw(fpsText);
 }

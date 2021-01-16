@@ -9,6 +9,7 @@
 #include "SizedVector.hpp"
 #include "Morse.hpp"
 #include "StateMachine.hpp"
+#include "Speed.hpp"
 
 class Graph {
 private:
@@ -21,8 +22,9 @@ private:
     void readData();
     fpt deltaX;
     Morse morse;
-    StateMachine stateMachine;
     void drawFPS();
+    SpeedController speedController;
+    StateMachine stateMachine;
 
 public:
     explicit Graph(const std::string &deviceName,

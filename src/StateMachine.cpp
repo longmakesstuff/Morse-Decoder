@@ -1,8 +1,10 @@
 #include "StateMachine.hpp"
 
-StateMachine::StateMachine() = default;
+StateMachine::StateMachine(SpeedController * _speed) : speedController(_speed){};
 
 std::optional<std::string> StateMachine::enter(fpt last, fpt mean, fpt std) {
+    auto& speedInformation = speedController->speedInformation();
+
     if (std > 200) {
         switch (currentState) {
             // Currently low
@@ -24,10 +26,12 @@ std::optional<std::string> StateMachine::enter(fpt last, fpt mean, fpt std) {
         switch (currentState) {
             // Switch from low to high
             case STATE_ZERO:
+                //std::cout << "Signal low: " <<  elapsed << std::endl;
+
                 this->currentState = STATE_ONE;
-                if (elapsed < 3000 && elapsed > 1000) {
+                if (elapsed < speedInformation.between_letter_high && elapsed > speedInformation.between_letter_low) {
                     return std::optional(" ");
-                } else if (elapsed < 4000 && elapsed > 3000) {
+                } else if (elapsed < speedInformation.between_word_high && elapsed > speedInformation.between_word_low) {
                     return std::optional(" /");
                 } else {
                     return std::nullopt;
@@ -35,9 +39,9 @@ std::optional<std::string> StateMachine::enter(fpt last, fpt mean, fpt std) {
                 // Switch from high to low
             case STATE_ONE:
                 this->currentState = STATE_ZERO;
-                if (elapsed < 1000) {
+                if (elapsed > speedInformation.between_dot_low && elapsed < speedInformation.between_dot_high) {
                     return std::optional(".");
-                } else if (elapsed < 2000) {
+                } else if (elapsed > speedInformation.between_dash_low && elapsed < speedInformation.between_dash_high) {
                     return std::optional("-");
                 } else {
                     return std::nullopt;

@@ -3,7 +3,7 @@ uint8_t i = 0;
 
 void setup()
 {
-  Serial.begin(19200);
+  Serial.begin(38400);
 }
 
 void loop(){

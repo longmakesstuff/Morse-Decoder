@@ -11,8 +11,8 @@ int main() {
     sf::Font font;
     font.loadFromFile("DejaVuSans.ttf");
 
-    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_19200, &window, &font, 500);
-    
+    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_38400, &window, &font, 500);
+
     // Main loop
     while (window.isOpen()) {
         graph.update();

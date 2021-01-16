@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <optional>
+#include "Speed.hpp"
 #include "Common.hpp"
 
 typedef enum State {
@@ -14,8 +15,9 @@ class StateMachine {
 private:
     State currentState = STATE_ZERO;
     sf::Clock clock;
+    SpeedController * speedController;
 public:
-    StateMachine();
+    explicit StateMachine(SpeedController * _speed);
 
     std::optional<std::string> enter(fpt last, fpt mean, fpt std);
 };
