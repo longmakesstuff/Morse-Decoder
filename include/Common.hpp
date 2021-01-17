@@ -3,10 +3,10 @@
 #include <cmath>
 #include <iostream>
 
-constexpr int32_t WINDOW_WIDTH = 1600;
-constexpr int32_t WINDOW_HEIGHT = 800;
-
 typedef float fpt;
+
+constexpr fpt WINDOW_WIDTH = 1800;
+constexpr fpt WINDOW_HEIGHT = 1000;
 
 #ifdef NDEBUG
 #define LOG_DEBUG(x) do { std::cout << "[DEBUG] " << __FILE__ << ":" << __LINE__ << ":" << __func__ << "() " << x << std::endl; fflush(stdout);} while (0);

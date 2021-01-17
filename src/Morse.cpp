@@ -44,6 +44,8 @@ Morse::Morse() {
             MorsePair("9", "----."),
             MorsePair("0", "-----"),
             MorsePair(" ", "/"),
+            MorsePair(":", "---..."),
+            MorsePair(":", "-.--.-"),
     };
     this->morseToAlpha = reverse_map(this->alphaToMorse);
 }

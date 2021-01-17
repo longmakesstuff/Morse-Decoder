@@ -5,14 +5,17 @@
 
 int main() {
     LOG_INFO("Initializing GUI")
-    sf::RenderWindow window({WINDOW_WIDTH, WINDOW_HEIGHT}, "Morse decoder", sf::Style::Default);
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8.0;
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Morse decoder", sf::Style::Close, settings);
+    window.setSize(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT));
     window.setFramerateLimit(60);
 
     // Load font
     sf::Font font;
     font.loadFromFile("DejaVuSans.ttf");
 
-    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_38400, &window, &font, 500, SpeedLevel::FAST);
+    Graph graph("/dev/ttyACM0", mn::CppLinuxSerial::BaudRate::B_38400, &window, &font, 1000, SpeedLevel::FAST);
 
     // Main loop
     while (window.isOpen()) {

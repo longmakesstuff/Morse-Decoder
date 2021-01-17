@@ -48,13 +48,12 @@ void Graph::drawPoints() {
 
     for (size_t i = 1; i < buffer.size(); i++) {
         Line line(sf::Vector2f((i - 1) * deltaX, WINDOW_HEIGHT - buffer[i - 1] - delta),
-                  sf::Vector2f(i * deltaX, WINDOW_HEIGHT - buffer[i] - delta));
+                  sf::Vector2f(i * deltaX, WINDOW_HEIGHT - buffer[i] - delta), 4, sf::Color{50, 50, 50});
 
         window->draw(line);
     }
 
-    Line meanLine(sf::Vector2f(0, WINDOW_HEIGHT - buffer.mean() - delta),
-                            sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT - buffer.mean() - delta));
+    Line meanLine(sf::Vector2f(0, WINDOW_HEIGHT / 2), sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT / 2), 4, sf::Color{50, 50, 50});
     window->draw(meanLine);
 }
 
@@ -80,7 +79,7 @@ void Graph::update() {
         auto machineOutput = stateMachine.enter(last, mean, std);
         if (machineOutput.has_value()) {
             morse.add(machineOutput.value());
-            if (machineOutput.value().find("/") != std::string::npos) {
+            if (machineOutput.value().find(" ") != std::string::npos) {
                 auto morseDecoded = morse.parse();
                 if (morseDecoded.has_value()) {
                     auto value = morseDecoded.value();
@@ -97,6 +96,7 @@ void Graph::update() {
     this->drawPoints();
     this->drawFPS();
     this->drawMessages();
+    this->drawInfo();
 
     // Refresh mainPanel
     window->display();
@@ -114,19 +114,34 @@ void Graph::drawFPS() {
 
 void Graph::drawMessages() {
     std::stringstream ss;
-    ss << "[Parsed messages] : \"";
+    ss << "[Parsed messages] - \"";
     for(const auto& message: messages.data()) {
         ss << message;
     }
     ss << "_\"";
-    sf::Text messageTests{ss.str(), *font, 25};
+    sf::Text messageTests{ss.str(), *font, 35};
 
-
-    messageTests.setPosition(10, WINDOW_HEIGHT - 50);
+    messageTests.setPosition(WINDOW_WIDTH / 2 - messageTests.getLocalBounds().width / 2 , WINDOW_HEIGHT - 250);
     messageTests.setFillColor(sf::Color::Black);
+
     window->draw(messageTests);
 }
 
-void Graph::drawRules() {
 
+void Graph::drawInfo() {
+    std::stringstream meanInfo;
+    meanInfo << "[Mean] - " << buffer.mean();
+    sf::Text meanText{meanInfo.str(), *font, 15};
+    meanText.setPosition(10, 5);
+    meanText.setFillColor(sf::Color::Black);
+
+
+    std::stringstream entropyInfo;
+    entropyInfo << "[Entropy] - " << buffer.entropy();
+    sf::Text entropyText {entropyInfo.str(), *font, 15};
+    entropyText.setPosition(10, 25);
+    entropyText.setFillColor(sf::Color::Black);
+
+    window->draw(meanText);
+    window->draw(entropyText);
 }

@@ -6,6 +6,7 @@
 #include <cinttypes>
 #include <stdexcept>
 #include <ostream>
+#include <set>
 
 /**
  * A ring buffer style for saving incoming data
@@ -17,6 +18,7 @@ class SizedVector {
 private:
     uint32_t cap;
     std::vector<T> mem;
+    std::set<T> set;
     fpt old_m = 0;
     fpt new_m = 0;
     fpt old_s = 0;
@@ -32,10 +34,14 @@ public:
     inline void push_back(const T &t) {
         // Delete first element
         if (this->mem.size() >= cap) {
+            if(this->set.find(mem.front()) != this->set.end()) {
+                this->set.erase(this->set.find(mem.front()));
+            }
             this->mem.erase(mem.begin());
         }
         // Push new element
         this->mem.push_back(t);
+        this->set.insert(t);
 
         if constexpr (std::is_same_v<T, fpt> || std::is_same_v<T, int> || std::is_same_v<T, long>) {
             // Start running statistics
@@ -60,14 +66,6 @@ public:
     inline void push_back(const std::vector<T> &data) {
         // There is free space
         if (data.size() < cap) {
-            uint32_t newSize = data.size() + mem.size();
-            if (newSize >= cap) {
-                uint32_t toRemove = newSize - cap;
-                mem.erase(mem.begin(), mem.begin() + toRemove);
-            }
-
-            // Sanity test
-            assert(mem.size() + data.size() <= cap);
 
             for (size_t i = 0; i < data.size(); i++) {
                 this->push_back(data[i]);
@@ -97,25 +95,29 @@ public:
         return new_m;
     }
 
+    inline fpt entropy() {
+        return std::log2(this->set.size());
+    }
+
     inline fpt std() {
-        if(this->mem.size() > 1) {
+        if (this->mem.size() > 1) {
             return new_s / (mem.size() - 1);
-        }else {
+        } else {
             return 0.0;
         }
     }
 
-    inline uint32_t getCap() const {
+    [[nodiscard]] inline uint32_t getCap() const {
         return cap;
     }
 
     inline void reset() {
-        this->mem = std::vector<fpt>();
+        this->mem = std::vector<T>();
+        this->set = std::set<T>();
         old_m = 0;
         new_m = 0;
         old_s = 0;
         new_s = 0;
-
     }
 
     inline std::vector<T> &data() {

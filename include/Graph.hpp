@@ -29,7 +29,7 @@ private:
     void drawFPS();
     void drawPoints();
     void drawMessages();
-    void drawRules();
+    void drawInfo();
 
 public:
     explicit Graph(const std::string &deviceName,
