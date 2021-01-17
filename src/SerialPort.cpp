@@ -63,28 +63,6 @@ namespace mn::CppLinuxSerial {
             }
         }
 
-        void SerialPort::SetDevice(const std::string &device) {
-            device_ = device;
-            if (state_ == State::OPEN)
-                ConfigureTermios();
-        }
-
-        void SerialPort::SetBaudRate(BaudRate baudRate) {
-            std::cout << "standard called\n";
-            baudRateType_ = BaudRateType::STANDARD;
-            baudRateStandard_ = baudRate;
-            if (state_ == State::OPEN)
-                ConfigureTermios();
-        }
-
-        void SerialPort::SetBaudRate(speed_t baudRate) {
-            std::cout << " custom called\n";
-            baudRateType_ = BaudRateType::CUSTOM;
-            baudRateCustom_ = baudRate;
-            if (state_ == State::OPEN)
-                ConfigureTermios();
-        }
-
         void SerialPort::Open() {
 
             // std::cout << "Attempting to open COM port \"" << device_ << "\"." << std::endl;
@@ -278,24 +256,6 @@ namespace mn::CppLinuxSerial {
                 // tty.c_cflag |= BOTHER;
                 tty.c_ispeed = baudRateCustom_;
                 tty.c_ospeed = baudRateCustom_;
-
-
-                // #include <linux/serial.h>
-                // // configure port to use custom speed instead of 38400
-                // struct serial_struct ss;
-                // ioctl(fileDesc_, TIOCGSERIAL, &ss);
-                // ss.flags = (ss.flags & ~ASYNC_SPD_MASK) | ASYNC_SPD_CUST;
-                // ss.custom_divisor = (ss.baud_base + (baudRateCustom_ / 2)) / baudRateCustom_;
-                // int closestSpeed = ss.baud_base / ss.custom_divisor;
-
-                // if (closestSpeed < baudRateCustom_ * 98 / 100 || closestSpeed > baudRateCustom_ * 102 / 100) {
-                // 	printf("Cannot set serial port speed to %d. Closest possible is %d\n", baudRateCustom_, closestSpeed);
-                // }
-
-                // ioctl(fileDesc_, TIOCSSERIAL, &ss);
-
-                // cfsetispeed(&tty, B38400);
-                // cfsetospeed(&tty, B38400);
             } else {
                 // Should never get here, bug in this libraries code!
                 assert(false);
@@ -353,36 +313,6 @@ namespace mn::CppLinuxSerial {
 
             // this->SetTermios(tty);
             this->SetTermios2(tty);
-
-            /*
-            // Flush port, then apply attributes
-            tcflush(this->fileDesc, TCIFLUSH);
-
-            if(tcsetattr(this->fileDesc, TCSANOW, &tty) != 0)
-            {
-                // Error occurred
-                this->sp->PrintError(SmartPrint::Ss() << "Could not apply terminal attributes for \"" << this->filePath << "\" - " << strerror(errno));
-                return;
-            }*/
-        }
-
-        void SerialPort::Write(const std::string &data) {
-
-            if (state_ != State::OPEN)
-                THROW_EXCEPT(
-                        std::string() + __PRETTY_FUNCTION__ + " called but state != OPEN. Please call Open() first.");
-
-            if (fileDesc_ < 0) {
-                THROW_EXCEPT(std::string() + __PRETTY_FUNCTION__ +
-                             " called but file descriptor < 0, indicating file has not been opened.");
-            }
-
-            int writeResult = write(fileDesc_, data.c_str(), data.size());
-
-            // Check status
-            if (writeResult == -1) {
-                throw std::system_error(EFAULT, std::system_category());
-            }
         }
 
         void SerialPort::Read(std::string &data) {
@@ -422,41 +352,6 @@ namespace mn::CppLinuxSerial {
 
             // If code reaches here, read must of been successful
         }
-
-        // termios SerialPort::GetTermios() {
-        //     if(fileDesc_ == -1)
-        //         throw std::runtime_error("GetTermios() called but file descriptor was not valid.");
-
-        // 	struct termios tty;
-        // 	memset(&tty, 0, sizeof(tty));
-
-        // 	// Get current settings (will be stored in termios structure)
-        // 	if(tcgetattr(fileDesc_, &tty) != 0)
-        // 	{
-        // 		// Error occurred
-        // 		std::cout << "Could not get terminal attributes for \"" << device_ << "\" - " << strerror(errno) << std::endl;
-        // 		throw std::system_error(EFAULT, std::system_category());
-        // 		//return false;
-        // 	}
-
-        // 	return tty;
-        // }
-
-        // void SerialPort::SetTermios(termios myTermios)
-        // {
-        // 	// Flush port, then apply attributes
-        // 	tcflush(fileDesc_, TCIFLUSH);
-
-        // 	if(tcsetattr(fileDesc_, TCSANOW, &myTermios) != 0)
-        // 	{
-        // 		// Error occurred
-        // 		std::cout << "Could not apply terminal attributes for \"" << device_ << "\" - " << strerror(errno) << std::endl;
-        // 		throw std::system_error(EFAULT, std::system_category());
-
-        // 	}
-
-        // 	// Successful!
-        // }
 
         termios2 SerialPort::GetTermios2() {
             struct termios2 term2;
