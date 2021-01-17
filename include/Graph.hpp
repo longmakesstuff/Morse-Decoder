@@ -10,6 +10,7 @@
 #include "Morse.hpp"
 #include "StateMachine.hpp"
 #include "Speed.hpp"
+#include "Line.hpp"
 
 class Graph {
 private:
@@ -19,12 +20,16 @@ private:
     mn::CppLinuxSerial::SerialPort port;
     SizedVector<fpt> buffer;
     FPS fps;
-    void readData();
-    fpt deltaX;
     Morse morse;
-    void drawFPS();
     SpeedController speedController;
     StateMachine stateMachine;
+    SizedVector<std::string> messages{100};
+
+    void readData();
+    void drawFPS();
+    void drawPoints();
+    void drawMessages();
+    void drawRules();
 
 public:
     explicit Graph(const std::string &deviceName,

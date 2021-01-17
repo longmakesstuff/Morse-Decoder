@@ -37,15 +37,17 @@ public:
         // Push new element
         this->mem.push_back(t);
 
-        // Start running statistics
-        if (this->mem.size() == 1) {
-            old_m = new_m = t;
-        } else {
-            new_m = old_m + (t - old_m) / this->mem.size();
-            new_s = old_s + (t - old_m) * (t - new_m);
+        if constexpr (std::is_same_v<T, fpt> || std::is_same_v<T, int> || std::is_same_v<T, long>) {
+            // Start running statistics
+            if (this->mem.size() == 1) {
+                old_m = new_m = t;
+            } else {
+                new_m = old_m + (t - old_m) / this->mem.size();
+                new_s = old_s + (t - old_m) * (t - new_m);
 
-            old_m = new_m;
-            old_s = new_s;
+                old_m = new_m;
+                old_s = new_s;
+            }
         }
 
         assert(mem.size() <= cap);

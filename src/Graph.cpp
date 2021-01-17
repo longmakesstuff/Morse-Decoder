@@ -14,7 +14,6 @@ Graph::Graph(const std::string &deviceName,
     port.SetTimeout(-1); // Block when reading until any data is received
     port.Open();
     LOG_INFO("GUI initialized successfully")
-    deltaX = WINDOW_WIDTH / buffer.getCap();
 }
 
 Graph::~Graph() {
@@ -42,6 +41,23 @@ void Graph::readData() {
     buffer.push_back(numbers);
 }
 
+void Graph::drawPoints() {
+   fpt mean = buffer.mean();
+   fpt delta = WINDOW_HEIGHT / 2 - mean;
+   fpt deltaX = WINDOW_WIDTH / buffer.getCap();
+
+    for (size_t i = 1; i < buffer.size(); i++) {
+        Line line(sf::Vector2f((i - 1) * deltaX, WINDOW_HEIGHT - buffer[i - 1] - delta),
+                  sf::Vector2f(i * deltaX, WINDOW_HEIGHT - buffer[i] - delta));
+
+        window->draw(line);
+    }
+
+    Line meanLine(sf::Vector2f(0, WINDOW_HEIGHT - buffer.mean() - delta),
+                            sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT - buffer.mean() - delta));
+    window->draw(meanLine);
+}
+
 void Graph::update() {
     while (window->pollEvent(event)) {
         switch (event.type) {
@@ -67,7 +83,10 @@ void Graph::update() {
             if (machineOutput.value().find("/") != std::string::npos) {
                 auto morseDecoded = morse.parse();
                 if (morseDecoded.has_value()) {
-                    std::cout << morseDecoded.value() << std::endl;
+                    auto value = morseDecoded.value();
+                    for(char i : value) {
+                        messages.push_back(std::string(1, i));
+                    }
                 }
             }
         }
@@ -75,29 +94,9 @@ void Graph::update() {
     // Drawing white background
     window->clear(sf::Color::White);
 
-    for (size_t i = 1; i < buffer.size(); i++) {
-        sf::VertexArray line(sf::LinesStrip, 2);
-
-        // Data multiplied with 10 at source
-        // Divide with 10 again
-        line[0].position = sf::Vector2f((i - 1) * deltaX, WINDOW_HEIGHT - buffer[i - 1]);
-        line[0].color = sf::Color::Black;
-        line[1].position = sf::Vector2f(i * deltaX, WINDOW_HEIGHT - buffer[i]);
-        line[1].color = sf::Color::Black;
-        window->draw(line);
-    }
-
-    sf::VertexArray meanLine(sf::LinesStrip, 2);
-
-    // Data multiplied with 10 at source
-    // Divide with 10 again
-    meanLine[0].position = sf::Vector2f(0, WINDOW_HEIGHT - buffer.mean());
-    meanLine[0].color = sf::Color::Red;
-    meanLine[1].position = sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT - buffer.mean());
-    meanLine[1].color = sf::Color::Red;
-    window->draw(meanLine);
-
-    drawFPS();
+    this->drawPoints();
+    this->drawFPS();
+    this->drawMessages();
 
     // Refresh mainPanel
     window->display();
@@ -106,9 +105,27 @@ void Graph::update() {
 void Graph::drawFPS() {
     std::stringstream ss;
     fps.update();
-    ss << "FPS: " << fps.getFPS();
+    ss << fps.getFPS() << " FPS";
     sf::Text fpsText{ss.str(), *font, 15};
-    fpsText.setPosition(10, 10);
+    fpsText.setPosition(WINDOW_WIDTH - 75, 10);
     fpsText.setFillColor(sf::Color::Black);
     window->draw(fpsText);
+}
+
+void Graph::drawMessages() {
+    std::stringstream ss;
+    ss << "Parsed messages:";
+    for(const auto& message: messages.data()) {
+        ss << message;
+    }
+    sf::Text messageTests{ss.str(), *font, 25};
+
+
+    messageTests.setPosition(10, WINDOW_HEIGHT - 50);
+    messageTests.setFillColor(sf::Color::Black);
+    window->draw(messageTests);
+}
+
+void Graph::drawRules() {
+
 }

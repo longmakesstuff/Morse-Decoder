@@ -29,4 +29,4 @@ namespace mn::CppLinuxSerial {
     };
 }
 
-#define THROW_EXCEPT(arg) throw Exception(__FILE__, __LINE__, arg);
+#define THROW_EXCEPT(arg) throw mn::CppLinuxSerial::Exception(__FILE__, __LINE__, arg);
