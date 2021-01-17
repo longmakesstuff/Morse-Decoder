@@ -114,10 +114,11 @@ void Graph::drawFPS() {
 
 void Graph::drawMessages() {
     std::stringstream ss;
-    ss << "Parsed messages:";
+    ss << "Parsed messages: \"";
     for(const auto& message: messages.data()) {
         ss << message;
     }
+    ss << "\"";
     sf::Text messageTests{ss.str(), *font, 25};
 
 

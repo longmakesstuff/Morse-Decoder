@@ -5,7 +5,7 @@
 
 int main() {
     LOG_INFO("Initializing GUI")
-    sf::RenderWindow window({WINDOW_WIDTH, WINDOW_HEIGHT}, "Live Data Plotter", sf::Style::Default);
+    sf::RenderWindow window({WINDOW_WIDTH, WINDOW_HEIGHT}, "Morse decoder", sf::Style::Default);
     window.setFramerateLimit(60);
 
     // Load font
