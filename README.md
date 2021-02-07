@@ -6,7 +6,7 @@ The project's idea is very simple, the Arduino program has the responsibility to
 
 ### Setup
 
-The light dependent transistor (https://en.wikipedia.org/wiki/Photoresistor) is a passive component that decreases resistance with respect to receiving luminosity (light) on the component's sensitive surface. Arduino gave me a really nice tool to start with this component, the bread board setup is really easy, too.
+The light dependent resistor (https://en.wikipedia.org/wiki/Photoresistor) is a passive component that decreases resistance with respect to receiving luminosity (light) on the component's sensitive surface. Arduino gave me a really nice tool to start with this component, the bread board setup is really easy, too.
 
 ![](data/setup.jpeg)
 
